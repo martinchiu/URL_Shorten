@@ -11,7 +11,7 @@ const routes= require('./routes')
 const app = express()
 
 // 設定連接阜
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 // 設定模板引擎
 app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: 'hbs'}))
