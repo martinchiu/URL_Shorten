@@ -19,10 +19,10 @@ router.post('/shorten', (req, res) => {
 
   const url = req.body.url
   const id = createRandom(targetLength)
-  const shortener = `${url}/${id}`
+  const shortener = `https://stark-springs-19644.herokuapp.com/${id}`
 
   return URL.create({ url, id })
-    .then(() => res.render('show', { shortener }))
+    .then(() => res.render('show', { shortener, url }))
     .catch(error => console.log(error))
 })
 
