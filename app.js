@@ -28,9 +28,10 @@ app.post('/shorten', (req, res) => {
 
   const url = req.body.url
   const id = createRandom(targetLength)
+  const shortener = `${url}/${id}`
 
   return URL.create({ url, id})
-    .then(() => res.render('show'))
+    .then(() => res.render('show', { shortener }))
     .catch(error => console.log(error))
 })
 
