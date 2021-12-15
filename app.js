@@ -5,6 +5,7 @@ const exphbs = require('express-handlebars')
 // 引入自建套件
 require('./config/mongoose')
 const URL =require('./models/URL')
+const createRandom = require('./utility/createRandom')
 
 // 啟動 express
 const app = express()
@@ -23,8 +24,12 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 app.post('/shorten', (req, res) => {
+  const targetLength = 5
+
   const url = req.body.url
-  return URL.create({ url })
+  const id = createRandom(targetLength)
+
+  return URL.create({ url, id})
     .then(() => res.render('show'))
     .catch(error => console.log(error))
 })
