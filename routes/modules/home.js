@@ -21,18 +21,26 @@ router.post('/shorten', (req, res) => {
   // 搜尋資料庫內有無已縮短過的原始網址
   URL.find({ url })
     .lean()
-    .then(data => {      
+    .then(data => {
       if (data.length === 0) {
         id = createRandom(targetLength)    // 沒有的話產生一個亂碼給新網址
       } else {
         id = data[0].id                    // 輸入相同網址時，直接從資料庫拿出產生過的亂碼
       }
-      const shortener = `https://stark-springs-19644.herokuapp.com/${id}`
+      const shortener = `${req.headers.host}/${id}`  // 將短網址定義為 '主機/亂碼'
 
       return URL.create({ url, id })
         .then(() => res.render('show', { shortener, url }))
         .catch(error => console.log(error))
     })
+})
+
+// 定義短網址可以找回原本網址的路由
+router.get('/:id', (req, res) => {
+  const id = req.params.id
+  URL.findOne({ id })
+    .lean()
+    .then(data => res.redirect(data.url))
 })
 
 // 匯出路由模組
