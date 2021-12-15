@@ -4,6 +4,7 @@ const exphbs = require('express-handlebars')
 
 // 引入自建套件
 require('./config/mongoose')
+const URL =require('./models/URL')
 
 // 啟動 express
 const app = express()
@@ -15,8 +16,17 @@ const PORT = 3000
 app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: 'hbs'}))
 app.set('view engine', 'hbs')
 
+// 引入 body-parser
+app.use(express.urlencoded({ extended: true }))
+
 app.get('/', (req, res) => {
   res.render('index')
+})
+app.post('/shorten', (req, res) => {
+  const url = req.body.url
+  return URL.create({ url })
+    .then(() => res.render('show'))
+    .catch(error => console.log(error))
 })
 
 app.listen(PORT, () => {
