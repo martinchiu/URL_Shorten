@@ -13,17 +13,26 @@ router.get('/', (req, res) => {
   res.render('index')
 })
 
-// 定義縮短網址路由
+// 定義縮短網址的路由
 router.post('/shorten', (req, res) => {
-  const targetLength = 5
-
+  const targetLength = 5                   // 定義亂碼的長度
+  let id = ''
   const url = req.body.url
-  const id = createRandom(targetLength)
-  const shortener = `https://stark-springs-19644.herokuapp.com/${id}`
+  // 搜尋資料庫內有無已縮短過的原始網址
+  URL.find({ url })
+    .lean()
+    .then(data => {      
+      if (data.length === 0) {
+        id = createRandom(targetLength)    // 沒有的話產生一個亂碼給新網址
+      } else {
+        id = data[0].id                    // 輸入相同網址時，直接從資料庫拿出產生過的亂碼
+      }
+      const shortener = `https://stark-springs-19644.herokuapp.com/${id}`
 
-  return URL.create({ url, id })
-    .then(() => res.render('show', { shortener, url }))
-    .catch(error => console.log(error))
+      return URL.create({ url, id })
+        .then(() => res.render('show', { shortener, url }))
+        .catch(error => console.log(error))
+    })
 })
 
 // 匯出路由模組
