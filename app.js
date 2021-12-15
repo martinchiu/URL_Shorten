@@ -1,5 +1,8 @@
-// 引入各種套件
+// 引入第三方套件
 const express = require('express')
+
+// 引入自建套件
+require('./config/mongoose')
 
 const app = express()
 
