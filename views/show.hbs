@@ -1,7 +1,24 @@
 <div class="mt-5 d-flex flex-column align-items-center">
   <h4>Success!Please use this link:</h4>
   <div>
-    <a href="{{ url }}">{{ shortener }}</a>
+    <a id="short_url" href="{{ url }}">{{ shortener }}</a>
   </div>
-  <button type="button" class="btn btn-primary mt-3">copy</button>
+  <button id="copy_btn" type="button" class="btn btn-primary mt-3">copy</button>
 </div>
+
+<script>
+  const copyBtn = document.querySelector('#copy_btn')
+    console.log(copyBtn)
+    const shortenURL = document.querySelector('#short_url').innerHTML
+    console.log(shortenURL)
+
+    copyBtn.addEventListener('click', function copy() {
+      navigator.clipboard.writeText(shortenURL)
+        .then(() => {
+          alert('內容已複製');
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    })
+</script>
