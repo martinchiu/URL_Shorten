@@ -24,14 +24,13 @@ router.post('/shorten', (req, res) => {
     .then(data => {
       if (data.length === 0) {
         id = createRandom(targetLength)    // 沒有的話產生一個亂碼給新網址
+        URL.create({ url, id })            // 在資料庫創建一筆新資料
       } else {
         id = data[0].id                    // 輸入相同網址時，直接從資料庫拿出產生過的亂碼
       }
       const shortener = `${req.headers.host}/${id}`  // 將短網址定義為 '主機/亂碼'
 
-      return URL.create({ url, id })
-        .then(() => res.render('show', { shortener, url }))
-        .catch(error => console.log(error))
+      res.render('show', { shortener, url })
     })
 })
 
